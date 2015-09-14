@@ -1,0 +1,16 @@
+{
+    "version": "1.0.0",
+    "summary": "Minesweeper game written in Elm",
+    "repository": "https://github.com/bolshchikov/elm-minesweeper.git",
+    "license": "MIT",
+    "source-directories": [
+        "."
+    ],
+    "exposed-modules": [],
+    "dependencies": {
+        "elm-lang/core": "2.1.0 <= v < 3.0.0",
+        "evancz/elm-html": "4.0.1 <= v < 5.0.0",
+        "evancz/start-app": "2.0.0 <= v < 3.0.0"
+    },
+    "elm-version": "0.15.1 <= v < 0.16.0"
+}
