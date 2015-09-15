@@ -1,11 +1,13 @@
 module Main where
 
 import StartApp.Simple exposing (start)
-import Tile
+import Html
+import Grid
 
+main : Signal Html.Html
 main =
   start
-  { model = Tile.init
-  , update = Tile.update
-  , view = Tile.view
+  { model = Grid.init 5
+  , update = Grid.update
+  , view = Grid.view
   }

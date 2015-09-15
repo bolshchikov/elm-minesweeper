@@ -1,7 +1,8 @@
-module Tile where
+module Tile(Model, init, Action, update, view) where
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
+import Html.Events exposing (..)
 
 
 type alias Model =
@@ -27,4 +28,12 @@ update action model =
 
 view : Signal.Address Action -> Model -> Html
 view address model =
-  div [ class "tile" ] [text "Tile"]
+  let textValue
+    = toString model.isBomb
+  in
+    if model.isOpened
+      then div [ class "tile" ] [ text textValue ]
+      else div [ class "tile"
+               , onClick address Reveal
+               ]
+               [ text "Click Me!" ]
