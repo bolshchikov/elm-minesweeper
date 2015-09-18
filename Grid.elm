@@ -3,34 +3,42 @@ module Grid where
 import Html exposing (..)
 import Tile
 
-type alias Model = List (ID, Tile.Model)
+type alias Model = List (List (ID, Tile.Model))
 
-type alias ID = Int
+type alias ID = String
 
 type Action = Reveal ID Tile.Action
 
 
-init : Int -> Model
-init x =
-  List.map (\a -> (a, Tile.init)) [1..x]
+init : Int -> Int -> Model
+init x y =
+  let
+    grid = List.map (\row -> List.map (\column -> toString row ++ toString column) [1..y]) [1..x]
+  in
+    List.map (\row -> List.map (\cell -> (cell, Tile.init) ) row  ) grid
 
 
 update : Action -> Model -> Model
 update action model =
   case action of
     Reveal id tileAction ->
-      let applyTileAction (tileId, tileModel) =
+      let
+        applyTileAction (tileId, tileModel) =
           if id == tileId
             then (tileId, Tile.update tileAction tileModel)
             else (tileId, tileModel)
       in
-        List.map applyTileAction model
+        List.map (\row -> List.map applyTileAction row) model
 
 
 
 view : Signal.Address Action -> Model -> Html
 view address model =
-  div [] (List.map ( tileView address ) model)
+  let
+    cells row = List.map (\cell -> td [] [ text (toString (fst cell)), tileView address cell ]) row
+    rows = List.map (\row -> tr [] ( cells row )) model
+  in
+    table [] (rows)
 
 
 tileView : Signal.Address Action -> (ID, Tile.Model) -> Html
