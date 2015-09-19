@@ -7,7 +7,7 @@ import Grid
 main : Signal Html.Html
 main =
   start
-  { model = Grid.init 5 5
+  { model = Grid.init 3 5 7
   , update = Grid.update
   , view = Grid.view
   }

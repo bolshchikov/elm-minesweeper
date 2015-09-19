@@ -12,9 +12,9 @@ type alias Model =
 
 type Action = Reveal
 
-init : Model
-init =
-  { isBomb = False
+init : Bool -> Model
+init isBomb =
+  { isBomb = isBomb
   , isOpened = False
   }
 
