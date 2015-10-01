@@ -1,4 +1,4 @@
-module Tile(Model, init, Action, update, view) where
+module Tile (Model, init, makeMine, Action, update, view) where
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -6,16 +6,23 @@ import Html.Events exposing (..)
 
 
 type alias Model =
-  { isBomb : Bool
+  { isMine : Bool
   , isOpened : Bool
   }
 
 type Action = Reveal
 
 init : Bool -> Model
-init isBomb =
-  { isBomb = isBomb
+init isMine =
+  { isMine = isMine
   , isOpened = False
+  }
+
+
+makeMine : Model -> Model
+makeMine model =
+  { model |
+    isMine <- True
   }
 
 update : Action -> Model -> Model
@@ -29,7 +36,7 @@ update action model =
 view : Signal.Address Action -> Model -> Html
 view address model =
   let textValue
-    = toString model.isBomb
+    = toString model.isMine
   in
     if model.isOpened
       then div [ class "tile" ] [ text textValue ]

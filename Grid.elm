@@ -1,5 +1,6 @@
-module Grid where
+module Grid (init, update, view) where
 
+import Random
 import Html exposing (..)
 import Tile
 
@@ -10,9 +11,35 @@ type alias ID = Int
 type Action = Reveal ID Tile.Action
 
 
+makeGrid : Int -> Int -> Model
+makeGrid width height =
+  let
+    lowerBound start = start * width + 1
+    upperBound start = (start + 1) * width
+  in
+    List.map (\row -> List.map (\cell -> (cell, Tile.init False)) [lowerBound row..upperBound row]) [0..height - 1]
+
+
+fillMines : Int -> Int -> Model -> Model
+fillMines minesAmount range grid =
+  let
+    seed = Random.initialSeed Random.maxInt
+    listGenerator = Random.list minesAmount (Random.int 1 range)
+    locations = fst <| Random.generate listGenerator seed
+    markAsMine cell =
+      if List.member (fst cell) locations
+        then (fst cell, Tile.makeMine <| snd <| cell)
+        else cell
+  in
+    List.map (\row -> List.map markAsMine row) grid
+
+
 init : Int -> Int -> Int -> Model
-init bombs width height =
-  List.map (\row -> List.map (\cell -> (cell, Tile.init False)) [row * width + 1..(row + 1) * width]) [0..height - 1]
+init minesAmount width height =
+  let
+    emptyGrid = makeGrid width height
+  in
+    fillMines minesAmount (width * height) emptyGrid
 
 
 update : Action -> Model -> Model
