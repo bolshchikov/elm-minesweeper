@@ -12,7 +12,9 @@ type alias Model =
   , isMarked : Bool
   }
 
+
 type Action = Reveal | Mark
+
 
 init : Bool -> Model
 init isMine =
@@ -28,11 +30,13 @@ makeMine model =
     isMine <- True
   }
 
+
 reveal : Model -> Model
 reveal model =
   { model |
     isOpened <- True
   }
+
 
 mark : Model -> Model
 mark model =

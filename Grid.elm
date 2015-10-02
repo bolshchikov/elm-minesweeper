@@ -1,12 +1,16 @@
 module Grid (init, update, view) where
 
+
 import Random
 import Html exposing (..)
 import Tile
 
+
 type alias Model = List (List (ID, Tile.Model))
 
+
 type alias ID = Int
+
 
 type Action = Reveal ID Tile.Action
 

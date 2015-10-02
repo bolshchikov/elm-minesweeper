@@ -13,6 +13,7 @@ customOptions =
   , preventDefault = True
   }
 
+
 onRightClick : Signal.Address a -> a -> Attribute
 onRightClick address msg =
   Html.Events.onWithOptions "contextmenu" customOptions Json.value (\_ -> Signal.message address msg)
