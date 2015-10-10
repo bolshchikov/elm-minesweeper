@@ -1,4 +1,4 @@
-module Minesweeper (init, update, view) where
+module Minesweeper (initGame, updateGame, renderGame) where
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -23,37 +23,40 @@ type alias Tile =
 type GameState = Win | Lose | Play
 
 -- ACTIONS
+
 type Action = Reveal | Mark
 
-update : Action -> Game -> Game
-update action game =
+updateGame : Action -> Game -> Game
+updateGame action game =
   game
 
 -- VIEWS
 
-view : Signal.Address Action -> Game -> Html
-view address game =
+renderGame : Signal.Address Action -> Game -> Html
+renderGame address game =
   let
     cells row = List.map (\cell -> td [ ] [ renderTile address cell ]) row
     rows = List.map (\row -> tr [] ( cells row )) game.grid
   in
     div
-      [ id "minsweeper" ]
+      [ id "minesweeper" ]
       [ table
         []
         rows
       ]
 
+
 renderTile : Signal.Address Action -> Tile -> Html
 renderTile address tile =
   div
     []
-    [ text "Click Me!" ]
+    [ text <| toString tile.isBomb ]
+
 
 -- INIT
 
-init : Int -> Int -> Int -> Game
-init amountOfBombs gridWidth gridHeight =
+initGame : Int -> Int -> Int -> Game
+initGame amountOfBombs gridWidth gridHeight =
   { grid = initGrid amountOfBombs gridWidth gridHeight
   , state = Play
   }
@@ -62,6 +65,7 @@ init amountOfBombs gridWidth gridHeight =
 initGrid : Int -> Int -> Int -> Grid
 initGrid amountOfBombs gridWidth gridHeight =
   initEmptyGrid gridWidth gridHeight
+    |> fillBombs amountOfBombs
 
 
 initEmptyGrid : Int -> Int -> Grid
@@ -70,7 +74,8 @@ initEmptyGrid width height =
     lowerBound start = start * width + 1
     upperBound start = (start + 1) * width
   in
-    List.map (\row -> List.map (\cell -> initTile cell) [lowerBound row..upperBound row]) [0..height - 1]
+    [0..height - 1]
+      |> List.map (\row -> List.map initTile [lowerBound row..upperBound row]) 
 
 
 initTile : Int -> Tile
@@ -81,3 +86,8 @@ initTile id =
   , value = 0
   , id = id
   }
+
+
+fillBombs : Int -> Grid -> Grid
+fillBombs amountOfBombs grid =
+  grid

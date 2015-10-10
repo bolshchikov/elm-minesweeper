@@ -7,7 +7,7 @@ import Minesweeper
 main : Signal Html.Html
 main =
   start
-  { model = Minesweeper.init 5 5 7
-  , update = Minesweeper.update
-  , view = Minesweeper.view
+  { model = Minesweeper.initGame 5 5 7
+  , update = Minesweeper.updateGame
+  , view = Minesweeper.renderGame
   }
