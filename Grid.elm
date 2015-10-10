@@ -59,11 +59,10 @@ update action model =
         List.map (\col -> List.map applyTileAction col) model
 
 
-
 view : Signal.Address Action -> Model -> Html
 view address model =
   let
-    cells row = List.map (\cell -> td [] [ text (toString (fst cell)), tileView address cell ]) row
+    cells row = List.map (\cell -> td [ ] [ text (toString (fst cell)), tileView address cell ]) row
     rows = List.map (\row -> tr [] ( cells row )) model
   in
     table [] (rows)
